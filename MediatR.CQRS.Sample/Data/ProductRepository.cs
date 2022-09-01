@@ -42,4 +42,10 @@ public class ProductsRepository : IProductsRepository
         await Task.CompletedTask;
         return _products?.FirstOrDefault(p => p.Id == id);
     }
+
+    public async Task EventOccurred(Product product, string evt)
+    {
+        _products!.Single(p => p.Id == product.Id).Name = $"{product.Name} evt: {evt}";
+        await Task.CompletedTask;
+    }
 }

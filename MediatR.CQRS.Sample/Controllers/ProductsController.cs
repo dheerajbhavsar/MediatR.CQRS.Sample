@@ -1,5 +1,6 @@
 ﻿using MediatR.CQRS.Sample.Commands;
 using MediatR.CQRS.Sample.Models;
+using MediatR.CQRS.Sample.Notifications;
 using MediatR.CQRS.Sample.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
@@ -11,8 +12,13 @@ namespace MediatR.CQRS.Sample.Controllers;
 public class ProductsController : ControllerBase
 {
     private readonly ISender _sender;
+    private readonly IPublisher _publisher;
 
-    public ProductsController(ISender sender) => _sender = sender;
+    public ProductsController(ISender sender, IPublisher publisher)
+    {
+        _sender = sender;
+        _publisher = publisher;
+    }
 
     [HttpGet(Name = "GetAllProducts")]
     public async Task<ActionResult<IEnumerable<Product>>> GetAsync()
@@ -41,6 +47,9 @@ public class ProductsController : ControllerBase
         }
 
         var productToReturn = await _sender.Send(new AddProductCommand(product));
+
+        await _publisher.Publish(new ProductAddedNotification(productToReturn));
+
         return CreatedAtRoute("GetProductById",
             new { id = productToReturn.Id },
             productToReturn);

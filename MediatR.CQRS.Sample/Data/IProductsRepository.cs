@@ -8,4 +8,5 @@ public interface IProductsRepository
     Task<IEnumerable<Product>> GetAllProductsAsync();
     Task<Product?> GetProductByIdAsync(int id);
     Task<bool> DeleteProductAsync(int id);
+    Task EventOccurred(Product product, string evt);
 }
