@@ -24,6 +24,12 @@ public class ProductsRepository : IProductsRepository
         await Task.CompletedTask;
     }
 
+    public async Task<bool> DeleteProductAsync(int id)
+    {
+        await Task.CompletedTask;
+        return _products!.Remove(_products[--id]);
+    }
+
     public async Task<IEnumerable<Product>> GetAllProductsAsync()
     {
         return _products != null ?

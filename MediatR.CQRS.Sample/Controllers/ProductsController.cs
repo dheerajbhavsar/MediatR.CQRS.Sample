@@ -2,6 +2,7 @@
 using MediatR.CQRS.Sample.Models;
 using MediatR.CQRS.Sample.Queries;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace MediatR.CQRS.Sample.Controllers;
 
@@ -43,5 +44,20 @@ public class ProductsController : ControllerBase
         return CreatedAtRoute("GetProductById",
             new { id = productToReturn.Id },
             productToReturn);
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> DeleteAsync(int id)
+    {
+        var product = await _sender.Send(new GetProductQuery(id));
+
+        if (product is null)
+        {
+            return NotFound();
+        }
+
+        _ = await _sender.Send(new DeleteProductCommand(id));
+
+        return NoContent();
     }
 }
