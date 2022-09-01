@@ -30,4 +30,10 @@ public class ProductsRepository : IProductsRepository
             await Task.FromResult(_products) :
             Enumerable.Empty<Product>();
     }
+
+    public async Task<Product?> GetProductByIdAsync(int id)
+    {
+        await Task.CompletedTask;
+        return _products?.FirstOrDefault(p => p.Id == id);
+    }
 }

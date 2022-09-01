@@ -2,5 +2,4 @@
 
 namespace MediatR.CQRS.Sample.Queries;
 
-public record GetProductsQuery : IRequest<IEnumerable<Product>>;
-
+public record GetProductQuery(int Id) : IRequest<Product>;

@@ -4,16 +4,18 @@ using MediatR.CQRS.Sample.Queries;
 
 namespace MediatR.CQRS.Sample.Handler;
 
-public class GetProductsHandler : IRequestHandler<GetProductsQuery, IEnumerable<Product>>
+public class GetProductHandler : IRequestHandler<GetProductQuery, Product?>
 {
     private readonly IProductsRepository _productsRepository;
 
-    public GetProductsHandler(IProductsRepository productsRepository) => 
+    public GetProductHandler(IProductsRepository productsRepository) =>
         _productsRepository = productsRepository;
 
-    public async Task<IEnumerable<Product>> Handle(GetProductsQuery request,
+
+    public async Task<Product?> Handle(GetProductQuery request,
         CancellationToken cancellationToken)
     {
-        return await _productsRepository.GetAllProductsAsync();
+        return await _productsRepository
+            .GetProductByIdAsync(request.Id);
     }
 }
